@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNU 학과정보 알리미</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+            integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+            crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+    <style type="text/css">
+        * {
+            font-family: "Stylish", sans-serif;
+        }
+
+        .wrap {
+            width: 900px;
+            margin: auto;
+        }
+
+        .version {
+            background-color: gray;
+            color: white;
+        }
+    </style>
+
+    <script>
+        function getNewpost() {
+            var major = $("#get-major").val();
+            if (major == '') {
+                alert("전공을 입력하세요!");
+                return;
+            }
+            
+            $.ajax({
+                type: "POST",
+                url: "/get/newpostonweb",
+                data: {
+                    major: major
+                },
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert("포스팅 성공!");
+                        urls = response['data'];
+                        for (let i = 0; i < urls.length; i++) {
+                            console.log(urls[i][0] + ' ' + urls[i][1] + ' ' + urls[i][2]);
+                        }
+                    } else if (response["result"] == "missing") {
+                        alert("해당하는 전공이 존재하지 않습니다! 다시 입력해주세요!");
+                    } else {
+                        alert("서버 오류!");
+                    }
+                }
+            })
+        }
+
+        function appendURL() {
+            var major = $("#new-major").val();
+            var pre_url = $("#pre-url").val();
+            var url1 = $("#url1").val();
+            var url2 = $("#url2").val();
+            var url3 = $("#url3").val();
+            var url4 = $("#url4").val();
+            var url5 = $("#url5").val();
+            var post_url = $("#post-url").val();
+            if (major == '' || pre_url == '' || url1 == '' || post_url == '') {
+                alert("전공과 URL을 정확하게 입력해주세요!");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/post/newmajor",
+                data: {
+                    major: major,
+                    pre_url: pre_url,
+                    url1: url1,
+                    url2: url2,
+                    url3: url3,
+                    url4: url4,
+                    url5: url5,
+                    post_url: post_url
+                },
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert("전공+주소 추가 성공!");
+                        // window.location.reload();
+                    } else {
+                        alert("서버 오류!")
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+
+
+    <div class="wrap">
+
+        <div class="jumbotron">
+            <h1 class="display-4" style="display:inline">PNU 학과정보 알리미</h1>
+            <h3>안녕하세요! PNU 학과정보 알리미의 홈페이지입니다!</h3>
+            <hr class="my-4">
+
+            <div class="input-group mb-3">
+                <input type="text" id="new-major" class="form-control" placeholder="전공을 입력하세요." aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">URL</span>
+                <input type="text" id="pre-url" aria-label="Pre URL" class="form-control" placeholder="pre">
+                <input type="text" id="url1" aria-label="URL1" class="form-control" placeholder="number">
+                <input type="text" id="url2" aria-label="URL2" class="form-control">
+                <input type="text" id="url3" aria-label="URL3" class="form-control">
+                <input type="text" id="url4" aria-label="URL4" class="form-control">
+                <input type="text" id="url5" aria-label="URL5" class="form-control">
+                <input type="text" id="post-url" aria-label="Post URL" class="form-control" placeholder="post">
+            </div>
+            <p class="lead">
+                <button onclick="appendURL()" id="btn-post-box" type="submit" class="btn btn-primary">전공 추가하기</button>
+            </p>
+            <hr class="my-4">
+
+            <div class="input-group mb-3">
+                <input type="text" id="get-major" class="form-control" placeholder="전공을 입력하세요." aria-describedby="basic-addon1">
+            </div>
+            <p class="lead">
+                <button onclick="getNewpost()" id="btn-post-box" type="submit" class="btn btn-primary">글 가져오기</button>
+            </p>
+        </div>
+        
+        <div id="card-list" class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+            
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

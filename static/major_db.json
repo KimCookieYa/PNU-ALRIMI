@@ -1,0 +1,14 @@
+{
+    "majors": [
+        {
+            "name": "정보컴퓨터공학부",
+            "pre_url": "https://cse.pusan.ac.kr/bbs/cse/",
+            "url1": "2605",
+            "url2": "2616",
+            "url3": "12278",
+            "url4": "2617",
+            "url5": "2618",
+            "post_url": "/rssList.do?row=10"
+        }
+    ]
+}
